@@ -2,44 +2,40 @@ pipeline {
     agent { label 'Node1' }
 
     stages {
-
-        stage('pull scm git ') {
+        stage('Pull SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/mdkamran0401/Amazon-Jenkins.git'
+                // Automatically checks out the current branch being built
+                checkout scm
             }
         }
-        stage('compile ') {
+        stage('Compile') {
             steps {
                 sh 'mvn compile'
             }
         }
 
-        stage('build') {
+        stage('Build') {
             steps {
                  sh 'mvn clean install'
             }
         }
-
-        
     }
 
-post {
-    success {
-        emailext(
-            to: 'kamran.abc.reports@gmail.com',
-            subject: "Jenkins Pipeline - ${env.JOB_NAME} - SUCCESS",
-            body: "Your Jenkins Pipeline is successful"
-        )
-    }
+    post {
+        success {
+            emailext(
+                to: 'kamran.abc.reports@gmail.com',
+                subject: "Jenkins Pipeline - ${env.JOB_NAME} - SUCCESS",
+                body: "Your Jenkins Pipeline is successful"
+            )
+        }
 
-    failure {
-        emailext(
-            to: 'kamran.abc.reports@gmail.com',
-            subject: "Jenkins Pipeline - ${env.JOB_NAME} - FAILURE",
-            body: "Your Jenkins Pipeline has failed"
-        )
+        failure {
+            emailext(
+                to: 'kamran.abc.reports@gmail.com',
+                subject: "Jenkins Pipeline - ${env.JOB_NAME} - FAILURE",
+                body: "Your Jenkins Pipeline has failed"
+            )
+        }
     }
-    
-   }
-
 }
