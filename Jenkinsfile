@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'Node1' }
     environment {
         // Use PATH+EXTRA to append to PATH properly test and test
         PATH = "/usr/bin:/bin:/opt/homebrew/bin"
