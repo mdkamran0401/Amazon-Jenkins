@@ -8,7 +8,7 @@ pipeline {
 
         stage('pull scm git ') {
             steps {
-                git branch: 'IB-Demo_PR', url: 'https://github.com/PraveenKuber/Amazon-Jenkins.git'
+                git branch: 'main', url: 'https://github.com/PraveenKuber/Amazon-Jenkins.git'
             }
         }
         stage('compile ') {
@@ -21,7 +21,19 @@ pipeline {
             steps {
                  sh 'mvn clean install'
             }
+        }
 
+        
+    }
+
+  post{
+
+  success{
+     echo 'Build success 1'
+  }
+    
+  failure{
+       echo 'Failure in the build'
    }
 
   }
