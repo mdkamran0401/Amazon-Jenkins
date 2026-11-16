@@ -2,7 +2,7 @@ pipeline {
     agent { label 'Node1' }
 
     stages {
-        stage('Compile') {
+        stage('Compile Stage') {
             steps {
                 sh '#!/bin/bash\nmvn compile'
             }
