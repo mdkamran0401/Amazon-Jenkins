@@ -1,34 +1,37 @@
 pipeline {
-    agent { label 'Node1' }
 
-    stages {
-        stage('Compile') {
+     agent { label 'Node1' }
+
+       stages {
+          
+          stage ( 'clean' )  {
+
             steps {
-                sh '#!/bin/bash\nmvn compile'
-            }
-        }
 
-        stage('Build') {
+               sh 'mvn clean'
+
+                  }
+
+                }
+
+          stage ( 'compile' ) {
+ 
             steps {
-                sh '#!/bin/bash\nmvn clean install'
-            }
-        }
-    }
 
-    post {
-        success {
-            emailext(
-                to: 'kamran.abc.reports@gmail.com',
-                subject: "Jenkins Pipeline - ${env.JOB_NAME} - SUCCESS",
-                body: "Your Jenkins Pipeline is successful"
-            )
-        }
-        failure {
-            emailext(
-                to: 'kamran.abc.reports@gmail.com',
-                subject: "Jenkins Pipeline - ${env.JOB_NAME} - FAILURE",
-                body: "Your Jenkins Pipeline has failed"
-            )
-        }
-    }
-}
+                sh 'mvn compile'
+
+                  }
+
+                 }
+
+          stage ( 'build' )  {
+
+            steps {
+
+                sh 'mvn clean install'
+
+                  }
+                }
+              }
+            }
+
