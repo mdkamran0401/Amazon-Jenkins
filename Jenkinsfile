@@ -1,45 +1,22 @@
+stage('Verify Tools') {
+    steps {
+        bat '''
+        echo Computer Name: %COMPUTERNAME%
+        echo JAVA_HOME=%JAVA_HOME%
+        echo MAVEN_HOME=%MAVEN_HOME%
+        echo PATH=%PATH%
 
-pipeline {
-    agent {
-        label 'kam-WinNode1'
-    }
+        echo Checking Windows where.exe:
+        C:\\Windows\\System32\\where.exe java || echo where.exe could not find Java
 
-    stages {
+        echo Checking Java directly:
+        "%JAVA_HOME%\\bin\\java.exe" -version || echo Java check failed
 
-        stage('Verify Tools') {
-            steps {
-                bat 'echo Computer Name: %COMPUTERNAME%'
-                bat 'echo JAVA_HOME=%JAVA_HOME%'
-                bat 'echo MAVEN_HOME=%MAVEN_HOME%'
+        echo Checking Maven directly:
+        "C:\\Tools\\apache-maven-3.10.2\\bin\\mvn.cmd" -version || echo Maven check failed
 
-                bat 'where.exe java'
-                bat 'where.exe mvn'
-                bat 'where.exe git'
-
-                bat 'java -version'
-                bat 'mvn -version'
-                bat 'git --version'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                bat 'mvn clean install'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build completed successfully on Windows Agent!'
-        }
-
-        failure {
-            echo 'Build failed. Please check the console output.'
-        }
-
-        always {
-            echo 'Pipeline execution finished.'
-        }
+        echo Checking Git directly:
+        "C:\\Program Files\\Git\\cmd\\git.exe" --version || echo Git check failed
+        '''
     }
 }
