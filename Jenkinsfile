@@ -1,34 +1,45 @@
+
 pipeline {
-    agent any
+    agent {
+        label 'kam-WinNode1'
+    }
 
     stages {
-        stage('Compile') {
+
+        stage('Verify Tools') {
             steps {
-                sh '#!/bin/bash\nmvn compile'
+                bat 'hostname'
+                bat 'java -version'
+                bat 'mvn -version'
+                bat 'git --version'
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                git branch: 'demo-Rel2',
+                    url: 'https://github.com/mdkamran0401/Amazon-Jenkins.git'
             }
         }
 
         stage('Build') {
             steps {
-                sh '#!/bin/bash\nmvn clean install'
+                bat 'mvn clean install'
             }
         }
     }
 
     post {
         success {
-            emailext(
-                to: 'kamran.abc.reports@gmail.com',
-                subject: "Jenkins Pipeline - ${env.JOB_NAME} - SUCCESS",
-                body: "Your Jenkins Pipeline is successful"
-            )
+            echo 'Build completed successfully on Windows Agent!'
         }
+
         failure {
-            emailext(
-                to: 'kamran.abc.reports@gmail.com',
-                subject: "Jenkins Pipeline - ${env.JOB_NAME} - FAILURE",
-                body: "Your Jenkins Pipeline has failed"
-            )
+            echo 'Build failed. Please check the console output.'
+        }
+
+        always {
+            echo 'Pipeline execution finished.'
         }
     }
 }
