@@ -1,28 +1,21 @@
-
 pipeline {
     agent {
         label 'kam-WinNode1'
     }
 
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                bat '"C:\\Tools\\apache-maven-3.10.2\\bin\\mvn.cmd" clean install'
+                git branch: 'demo-Rel2',
+                    credentialsId: 'GithubAppCred',
+                    url: 'https://github.com/mdkamran0401/Amazon-Jenkins.git'
             }
         }
-    }
 
-    post {
-        success {
-            echo 'Build completed successfully!'
-        }
-
-        failure {
-            echo 'Build failed. Check the console output.'
-        }
-
-        always {
-            echo 'Pipeline execution finished.'
+        stage('Build') {
+            steps {
+                bat 'mvn clean install'
+            }
         }
     }
 }
