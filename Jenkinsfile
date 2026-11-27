@@ -8,17 +8,10 @@ pipeline {
 
         stage('Verify Tools') {
             steps {
-                bat 'hostname'
+                bat 'echo Computer Name: %COMPUTERNAME%'
                 bat 'java -version'
                 bat 'mvn -version'
                 bat 'git --version'
-            }
-        }
-
-        stage('Checkout') {
-            steps {
-                git branch: 'demo-Rel2',
-                    url: 'https://github.com/mdkamran0401/Amazon-Jenkins.git'
             }
         }
 
